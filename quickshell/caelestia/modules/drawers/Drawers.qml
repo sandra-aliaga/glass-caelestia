@@ -183,7 +183,7 @@ Variants {
                     visibilities: visibilities
                     popouts: panels.popouts
 
-                    disabled: scope.barDisabled
+                    disabled: true  // replaced by TopBar in glass theme
 
                     Component.onCompleted: Visibilities.bars.set(scope.modelData, this)
                 }
