@@ -159,6 +159,63 @@ PanelWindow {
 }
 ```
 
+### Per-monitor workspaces — `HyprlandMonitor`
+`Workspaces.qml` filters `Hyprland.workspaces` by the monitor the TopBar belongs to, so each bar shows only its own monitor's workspaces.
+
+```qml
+// Workspaces.qml
+required property var monitor  // injected from TopBar (its HyprlandMonitor)
+
+Repeater {
+    model: Hyprland.workspaces.values.filter(ws => ws.monitor === monitor)
+    // ...
+}
+```
+
+### Urgent workspace badge
+`HyprlandWorkspace.urgent` drives a small accent dot over the workspace button. Automatically cleared by Hyprland once the workspace is visited.
+
+### Auto-hide on fullscreen — `hasFullscreen`
+When `monitor.activeWorkspace.hasFullscreen` is true, the TopBar slides out of view with an animation (`y: -height`). Slides back in when the fullscreen window closes.
+
+### Status icon popouts — `PopupWindow`
+Tray and status icon dropdowns use `PopupWindow { anchor.window: topBar }` anchored to the TopBar, instead of a second PanelWindow. The compositor handles positioning and auto-dismiss on outside click.
+
+### Layer shell namespaces — `WlrLayershell.namespace`
+Each PanelWindow sets a specific namespace so Hyprland layerrules can target them individually instead of all quickshell windows at once.
+
+| Window | Namespace |
+|---|---|
+| TopBar | `glass-topbar` |
+| CornerNotifs panel | `glass-corner-notifs` |
+| CornerMedia panel | `glass-corner-media` |
+| Hot corners | `glass-hotcorner` (no blur needed) |
+
+```qml
+PanelWindow {
+    WlrLayershell.namespace: "glass-topbar"
+}
+```
+
+Hyprland `rules.conf` updated to target by namespace:
+```
+layerrule = blur, namespace:glass-topbar
+layerrule = ignorealpha 0.1, namespace:glass-topbar
+layerrule = blur, namespace:glass-corner-notifs
+layerrule = ignorealpha 0.1, namespace:glass-corner-notifs
+layerrule = blur, namespace:glass-corner-media
+layerrule = ignorealpha 0.1, namespace:glass-corner-media
+```
+
+### Corner panel layer — `WlrLayer.Overlay`
+Corner panels switch to `WlrLayer.Overlay` when visible so they render above regular application windows.
+
+```qml
+CornerNotifsPanel {
+    WlrLayershell.layer: visible ? WlrLayer.Overlay : WlrLayer.Top
+}
+```
+
 ---
 
 ## Base component: GlassRect
