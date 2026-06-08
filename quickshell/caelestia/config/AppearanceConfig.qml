@@ -10,9 +10,9 @@ JsonObject {
 
     component Rounding: JsonObject {
         property real scale: 1
-        property int small: 12 * scale
-        property int normal: 17 * scale
-        property int large: 25 * scale
+        property int small: 0 * scale
+        property int normal: 0 * scale
+        property int large: 0 * scale
         property int full: 1000 * scale
     }
 
@@ -85,8 +85,8 @@ JsonObject {
     }
 
     component Transparency: JsonObject {
-        property bool enabled: false
-        property real base: 0.85
-        property real layers: 0.4
+        property bool enabled: true
+        property real base: 0.55
+        property real layers: 0.35
     }
 }
