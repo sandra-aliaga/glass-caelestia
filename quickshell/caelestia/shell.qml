@@ -8,8 +8,8 @@ import "modules/background"
 import "modules/areapicker"
 import "modules/lock"
 import "modules/topbar"
-import "modules/corner-notifs"
-import "modules/corner-media"
+import "modules/cornernotifs"
+import "modules/cornermedia"
 import Quickshell
 
 ShellRoot {

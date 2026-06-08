@@ -1,0 +1,192 @@
+# Archivo de configuración de atajos de Hyprland
+# Modificado para mayor comodidad en teclados con distribución en español (Latinoamérica).
+
+exec = hyprctl dispatch submap global
+submap = global
+
+# --- Lanzador de Aplicaciones ---
+bindi = Super, Super_L, global, caelestia:launcher # Abrir el lanzador de aplicaciones (menú principal)
+bindin = Super, catchall, global, caelestia:launcherInterrupt # Interrumpir el lanzador si se presiona otra tecla
+bindin = Super, mouse:272, global, caelestia:launcherInterrupt # Interrumpir con clic del ratón
+bindin = Super, mouse:273, global, caelestia:launcherInterrupt # Interrumpir con clic del ratón
+bindin = Super, mouse:274, global, caelestia:launcherInterrupt # Interrumpir con clic del ratón
+bindin = Super, mouse:275, global, caelestia:launcherInterrupt # Interrumpir con clic del ratón
+bindin = Super, mouse:276, global, caelestia:launcherInterrupt # Interrumpir con clic del ratón
+bindin = Super, mouse:277, global, caelestia:launcherInterrupt # Interrumpir con clic del ratón
+bindin = Super, mouse_up, global, caelestia:launcherInterrupt # Interrumpir con clic del ratón
+bindin = Super, mouse_down, global, caelestia:launcherInterrupt # Interrumpir con clic del ratón
+
+# --- Sistema y Sesión ---
+bind = $kbSession, global, caelestia:session # Abrir el menú de sesión (apagar, reiniciar, etc.)
+bindl = $kbClearNotifs, global, caelestia:clearNotifs # Limpiar todas las notificaciones
+bind = $kbShowPanels, global, caelestia:showall # Mostrar todos los paneles/barras
+bind = $kbLock, global, caelestia:lock # Bloquear la pantalla
+bindl = $kbRestoreLock, exec, caelestia shell -d # Restaurar sesión después del bloqueo
+bindl = $kbRestoreLock, global, caelestia:lock # Bloquear la pantalla (acción secundaria)
+bind = Ctrl+Super+Shift, L, exec, systemctl suspend-then-hibernate # Suspender el sistema
+
+# --- Brillo de Pantalla ---
+bindl = , XF86MonBrightnessUp, global, caelestia:brightnessUp # Subir brillo (tecla especial)
+bindl = , XF86MonBrightnessDown, global, caelestia:brightnessDown # Bajar brillo (tecla especial)
+
+# --- Controles Multimedia ---
+bindl = Ctrl+Super, Space, global, caelestia:mediaToggle # Reproducir/Pausar multimedia
+bindl = , XF86AudioPlay, global, caelestia:mediaToggle # Reproducir/Pausar (tecla especial)
+bindl = , XF86AudioPause, global, caelestia:mediaToggle # Pausar (tecla especial)
+bindl = Ctrl+Super, period, global, caelestia:mediaNext # Siguiente pista
+bindl = , XF86AudioNext, global, caelestia:mediaNext # Siguiente pista (tecla especial)
+bindl = Ctrl+Super, comma, global, caelestia:mediaPrev # Pista anterior
+bindl = , XF86AudioPrev, global, caelestia:mediaPrev # Pista anterior (tecla especial)
+bindl = , XF86AudioStop, global, caelestia:mediaStop # Detener multimedia (tecla especial)
+
+# --- Reinicio y Recarga ---
+bindr = Ctrl+Super+Shift, R, exec, qs -c caelestia kill # Recargar la configuración de Caelestia
+bindr = Ctrl+Super+Alt, R, exec, qs -c caelestia kill; caelestia shell -d # Forzar recarga completa
+
+# --- Espacios de Trabajo (Workspaces) ---
+$wsaction = ~/.local/share/caelestia/hypr/scripts/wsaction.fish
+bind = $kbGoToWs, 1, exec, $wsaction workspace 1 # Ir al espacio de trabajo 1
+bind = $kbGoToWs, 2, exec, $wsaction workspace 2 # Ir al espacio de trabajo 2
+bind = $kbGoToWs, 3, exec, $wsaction workspace 3 # Ir al espacio de trabajo 3
+bind = $kbGoToWs, 4, exec, $wsaction workspace 4 # Ir al espacio de trabajo 4
+bind = $kbGoToWs, 5, exec, $wsaction workspace 5 # Ir al espacio de trabajo 5
+bind = $kbGoToWs, 6, exec, $wsaction workspace 6 # Ir al espacio de trabajo 6
+bind = $kbGoToWs, 7, exec, $wsaction workspace 7 # Ir al espacio de trabajo 7
+bind = $kbGoToWs, 8, exec, $wsaction workspace 8 # Ir al espacio de trabajo 8
+bind = $kbGoToWs, 9, exec, $wsaction workspace 9 # Ir al espacio de trabajo 9
+bind = $kbGoToWs, 0, exec, $wsaction workspace 10 # Ir al espacio de trabajo 10
+
+# --- Grupos de Espacios de Trabajo ---
+bind = $kbGoToWsGroup, 1, exec, $wsaction -g workspace 1 # Ir al grupo de espacios 1
+bind = $kbGoToWsGroup, 2, exec, $wsaction -g workspace 2 # Ir al grupo de espacios 2
+bind = $kbGoToWsGroup, 3, exec, $wsaction -g workspace 3 # Ir al grupo de espacios 3
+bind = $kbGoToWsGroup, 4, exec, $wsaction -g workspace 4 # Ir al grupo de espacios 4
+bind = $kbGoToWsGroup, 5, exec, $wsaction -g workspace 5 # Ir al grupo de espacios 5
+bind = $kbGoToWsGroup, 6, exec, $wsaction -g workspace 6 # Ir al grupo de espacios 6
+bind = $kbGoToWsGroup, 7, exec, $wsaction -g workspace 7 # Ir al grupo de espacios 7
+bind = $kbGoToWsGroup, 8, exec, $wsaction -g workspace 8 # Ir al grupo de espacios 8
+bind = $kbGoToWsGroup, 9, exec, $wsaction -g workspace 9 # Ir al grupo de espacios 9
+bind = $kbGoToWsGroup, 0, exec, $wsaction -g workspace 10 # Ir al grupo de espacios 10
+
+# --- Navegación entre Espacios de Trabajo ---
+bind = Super, mouse_down, workspace, -1 # Ir al espacio anterior (rueda del ratón)
+bind = Super, mouse_up, workspace, +1 # Ir al espacio siguiente (rueda del ratón)
+binde = $kbPrevWs, workspace, -1 # Ir al espacio anterior
+binde = $kbNextWs, workspace, +1 # Ir al espacio siguiente
+binde = Super, Page_Up, workspace, -1 # Ir al espacio anterior
+binde = Super, Page_Down, workspace, +1 # Ir al espacio siguiente
+bind = Ctrl+Super, mouse_down, workspace, -10 # Ir al grupo de espacios anterior (rueda del ratón)
+bind = Ctrl+Super, mouse_up, workspace, +10 # Ir al grupo de espacios siguiente (rueda del ratón)
+bind = $kbToggleSpecialWs, exec, caelestia toggle specialws # Alternar espacio de trabajo especial
+
+# --- Mover Ventanas a Espacios de Trabajo ---
+bind = $kbMoveWinToWs, 1, exec, $wsaction movetoworkspace 1 # Mover ventana al espacio 1
+bind = $kbMoveWinToWs, 2, exec, $wsaction movetoworkspace 2 # Mover ventana al espacio 2
+bind = $kbMoveWinToWs, 3, exec, $wsaction movetoworkspace 3 # Mover ventana al espacio 3
+bind = $kbMoveWinToWs, 4, exec, $wsaction movetoworkspace 4 # Mover ventana al espacio 4
+bind = $kbMoveWinToWs, 5, exec, $wsaction movetoworkspace 5 # Mover ventana al espacio 5
+bind = $kbMoveWinToWs, 6, exec, $wsaction movetoworkspace 6 # Mover ventana al espacio 6
+bind = $kbMoveWinToWs, 7, exec, $wsaction movetoworkspace 7 # Mover ventana al espacio 7
+bind = $kbMoveWinToWs, 8, exec, $wsaction movetoworkspace 8 # Mover ventana al espacio 8
+bind = $kbMoveWinToWs, 9, exec, $wsaction movetoworkspace 9 # Mover ventana al espacio 9
+bind = $kbMoveWinToWs, 0, exec, $wsaction movetoworkspace 10 # Mover ventana al espacio 10
+
+# --- Mover Ventanas a Grupos de Espacios de Trabajo ---
+bind = $kbMoveWinToWsGroup, 1, exec, $wsaction -g movetoworkspace 1 # Mover ventana al grupo 1
+bind = $kbMoveWinToWsGroup, 2, exec, $wsaction -g movetoworkspace 2 # Mover ventana al grupo 2
+bind = $kbMoveWinToWsGroup, 3, exec, $wsaction -g movetoworkspace 3 # Mover ventana al grupo 3
+bind = $kbMoveWinToWsGroup, 4, exec, $wsaction -g movetoworkspace 4 # Mover ventana al grupo 4
+bind = $kbMoveWinToWsGroup, 5, exec, $wsaction -g movetoworkspace 5 # Mover ventana al grupo 5
+bind = $kbMoveWinToWsGroup, 6, exec, $wsaction -g movetoworkspace 6 # Mover ventana al grupo 6
+bind = $kbMoveWinToWsGroup, 7, exec, $wsaction -g movetoworkspace 7 # Mover ventana al grupo 7
+bind = $kbMoveWinToWsGroup, 8, exec, $wsaction -g movetoworkspace 8 # Mover ventana al grupo 8
+bind = $kbMoveWinToWsGroup, 9, exec, $wsaction -g movetoworkspace 9 # Mover ventana al grupo 9
+bind = $kbMoveWinToWsGroup, 0, exec, $wsaction -g movetoworkspace 10 # Mover ventana al grupo 10
+
+# --- Mover Ventanas entre Espacios de Trabajo Adyacentes ---
+binde = Super+Shift, Page_Up, movetoworkspace, -1 # Mover ventana al espacio anterior
+binde = Super+Shift, Page_Down, movetoworkspace, +1 # Mover ventana al espacio siguiente
+bind = Super+Shift, mouse_down, movetoworkspace, -1 # Mover ventana al espacio anterior (rueda del ratón)
+bind = Super+Shift, mouse_up, movetoworkspace, +1 # Mover ventana al espacio siguiente (rueda del ratón)
+binde = Ctrl+Super+Shift, right, movetoworkspace, +1 # Mover ventana al espacio siguiente
+binde = Ctrl+Super+Shift, left, movetoworkspace, -1 # Mover ventana al espacio anterior
+
+# --- Mover Ventanas a Espacios Especiales ---
+bind = Ctrl+Super+Shift, up, movetoworkspace, special:special # Mover ventana al espacio especial
+bind = Ctrl+Super+Shift, down, movetoworkspace, e+0 # Mover ventana del espacio especial al actual
+bind = Super+Shift, X, movetoworkspace, special:special # Alternativa para mover ventana al espacio especial
+
+# --- Grupos de Ventanas ---
+binde = $kbWindowGroupCycleNext, cyclenext, activewindow # Ciclar a la siguiente ventana del grupo
+binde = $kbWindowGroupCyclePrev, cyclenext, prev, activewindow # Ciclar a la ventana anterior del grupo
+binde = Ctrl+Alt, Tab, changegroupactive, f # Cambiar a la siguiente pestaña del grupo
+binde = Ctrl+Shift+Alt, Tab, changegroupactive, b # Cambiar a la pestaña anterior del grupo
+bind = $kbToggleGroup, togglegroup # Agrupar/desagrupar ventana
+bind = $kbUngroup, moveoutofgroup # Sacar ventana del grupo
+bind = Super+Shift, Comma, lockactivegroup, toggle # Bloquear/desbloquear el grupo activo
+
+# --- Acciones y Movimiento de Ventanas ---
+bind = Super, left, movefocus, l # Mover foco a la izquierda
+bind = Super, right, movefocus, r # Mover foco a la derecha
+bind = Super, up, movefocus, u # Mover foco arriba
+bind = Super, down, movefocus, d # Mover foco abajo
+bind = Super+Shift, left, movewindow, l # Mover ventana a la izquierda
+bind = Super+Shift, right, movewindow, r # Mover ventana a la derecha
+bind = Super+Shift, up, movewindow, u # Mover ventana arriba
+bind = Super+Shift, down, movewindow, d # Mover ventana abajo
+binde = Super, comma, splitratio, -0.1 # Disminuir la proporción de la ventana
+binde = Super, period, splitratio, 0.1 # Aumentar la proporción de la ventana
+bindm = Super, mouse:272, movewindow # Mover ventana con el ratón
+bindm = $kbMoveWindow, movewindow # Mover ventana con el teclado
+bindm = Super, mouse:273, resizewindow # Redimensionar ventana con el ratón
+bindm = $kbResizeWindow, resizewindow # Redimensionar ventana con el teclado
+bind = Ctrl+Super, H, centerwindow, 1 # Centrar la ventana activa
+bind = Ctrl+Super+Shift, H, resizeactive, exact 55% 70% # Redimensionar ventana a un tamaño predefinido
+bind = Ctrl+Super+Shift, H, centerwindow, 1 # Centrar la ventana después de redimensionar
+bind = $kbWindowPip, exec, caelestia resizer pip # Poner ventana en modo Picture-in-Picture
+bind = $kbPinWindow, pin # Fijar/Pinear ventana (siempre visible)
+bind = $kbWindowFullscreen, fullscreen, 0 # Pantalla completa (real)
+bind = $kbWindowBorderedFullscreen, fullscreen, 1 # Pantalla completa (con bordes/barra)
+bind = $kbToggleWindowFloating, togglefloating, # Hacer ventana flotante o de mosaico
+bind = $kbCloseWindow, killactive, # Cerrar la ventana activa
+
+# --- Espacios de Trabajo Especiales (Toggles) ---
+bind = $kbSystemMonitor, exec, caelestia toggle sysmon # Alternar monitor del sistema
+bind = $kbMusic, exec, caelestia toggle music # Alternar espacio de mósica
+bind = $kbCommunication, exec, caelestia toggle communication # Alternar espacio de comunicación
+bind = $kbTodo, exec, caelestia toggle todo # Alternar espacio de tareas (To-Do)
+bind = $kbSpotify, exec, caelestia toggle spotify # Alternar espacio de Spotify
+
+# --- Lanzar Aplicaciones ---
+bind = $kbTerminal, exec, app2unit -- $terminal # Abrir terminal
+bind = $kbBrowser, exec, app2unit -- $browser # Abrir navegador web
+bind = $kbEditor, exec, app2unit -- $editor # Abrir editor de código
+bind = Super+Shift, G, exec, app2unit -- github-desktop # Abrir Github Desktop
+bind = $kbFileExplorer, exec, app2unit -- $fileExplorer # Abrir explorador de archivos
+bind = Super+Shift, E, exec, app2unit -- nemo # Abrir explorador de archivos (Nemo)
+bind = Ctrl+Alt, Escape, exec, app2unit -- qps # Abrir monitor de procesos (qps)
+bind = Ctrl+Alt, V, exec, app2unit -- pavucontrol # Abrir control de volumen de PulseAudio
+
+# --- Utilidades ---
+bindl = , Print, exec, caelestia screenshot # Captura de pantalla completa
+bind = Super+Shift, S, global, caelestia:screenshotFreeze # Capturar región (congelando pantalla)
+bind = Ctrl+Super+Shift, S, global, caelestia:screenshot # Capturar región (sin congelar)
+bind = Super+Ctrl, R, exec, caelestia record -s # Grabar pantalla con sonido
+bind = Ctrl+Alt, R, exec, caelestia record # Grabar pantalla sin sonido
+bind = Super+Shift, R, exec, caelestia record -r # Grabar una región de la pantalla
+bind = Super+Shift, C, exec, hyprpicker -a # Selector de color
+
+# --- Volumen de Audio ---
+bindl = , XF86AudioMute, exec, wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle # Silenciar/Activar sonido (tecla especial)
+bindl = Super+Shift, M, exec, wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle # Silenciar/Activar sonido
+bindle = , XF86AudioRaiseVolume, exec, wpctl set-mute @DEFAULT_AUDIO_SINK@ 0; wpctl set-volume -l 1 @DEFAULT_AUDIO_SINK@ $volumeStep%+ # Subir volumen (tecla especial)
+bindle = , XF86AudioLowerVolume, exec, wpctl set-mute @DEFAULT_AUDIO_SINK@ 0; wpctl set-volume @DEFAULT_AUDIO_SINK@ $volumeStep%- # Bajar volumen (tecla especial)
+
+# --- Portapapeles y Emojis ---
+bind = Super, V, exec, pkill fuzzel || caelestia clipboard # Mostrar historial del portapapeles
+bind = Super+Ctrl, V, exec, pkill fuzzel || caelestia clipboard -d # Borrar historial del portapapeles
+bind = Super, Period, exec, pkill fuzzel || caelestia emoji -p # Selector de emojis
+bindl = Ctrl+Shift+Alt, V, exec, sleep 0.5s && ydotool type -d 1 "$(cliphist list | head -1 | cliphist decode)" # Pegar óltimo elemento sin formato
+
+# --- Pruebas ---
+bindl = Super+Ctrl, f12, exec, notify-send -u low -i dialog-information-symbolic 'Test notification' "Here's a really long message to test truncation and wrapping\nYou can middle click or flick this notification to dismiss it!" -a 'Shell' -A "Test1=I got it!" -A "Test2=Another action" # Enviar una notificación de prueba

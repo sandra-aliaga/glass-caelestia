@@ -29,17 +29,9 @@ PanelWindow {
     margins { top: 10; left: 10; right: 10 }
     exclusiveZone: hasFullscreen ? 0 : height
     implicitHeight: 38
+    visible: !hasFullscreen
 
     color: "transparent"
-
-    // Slide out on fullscreen
-    y: hasFullscreen ? -height - 10 : 0
-    Behavior on y {
-        Anim {
-            duration: Appearance.anim.durations.expressiveDefaultSpatial
-            easing.bezierCurve: Appearance.anim.curves.expressiveDefaultSpatial
-        }
-    }
 
     GlassRect {
         anchors.fill: parent
