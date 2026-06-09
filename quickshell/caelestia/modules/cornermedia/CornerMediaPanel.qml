@@ -50,7 +50,7 @@ PanelWindow {
                 font.pointSize: Appearance.font.size.small
                 color: Colours.palette.m3outlineVariant
                 font.capitalization: Font.AllUppercase
-                letterSpacing: 1
+                font.letterSpacing: 1
             }
 
             MediaInfo { Layout.fillWidth: true }
@@ -68,10 +68,10 @@ PanelWindow {
                 font.pointSize: Appearance.font.size.small
                 color: Colours.palette.m3outlineVariant
                 font.capitalization: Font.AllUppercase
-                letterSpacing: 1
+                font.letterSpacing: 1
             }
 
-            DailyLog { Layout.fillWidth: true }
+            DailyLogView { Layout.fillWidth: true }
         }
     }
 }

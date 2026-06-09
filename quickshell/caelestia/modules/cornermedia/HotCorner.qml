@@ -14,8 +14,8 @@ PanelWindow {
     color: "transparent"
 
     anchors { bottom: true; right: true }
-    width: 20
-    height: 20
+    implicitWidth: 20
+    implicitHeight: 20
 
     MouseArea {
         anchors.fill: parent

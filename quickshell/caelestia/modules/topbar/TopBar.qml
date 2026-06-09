@@ -1,6 +1,7 @@
 pragma ComponentBehavior: Bound
 
 import qs.services
+import qs.utils
 import qs.config
 import qs.components
 import qs.components.effects

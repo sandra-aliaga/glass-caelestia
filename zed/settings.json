@@ -7,12 +7,16 @@
 // custom settings, run `zed: open default settings` from the
 // command palette (cmd-shift-p / ctrl-shift-p)
 {
+  "icon_theme": "Monospace Icon Theme - Dark",
+  "project_panel": {
+    "dock": "left"
+  },
   "ui_font_size": 16,
   "buffer_font_size": 16,
   "theme": {
     "mode": "system",
     "light": "One Light",
-    "dark": "One Dark"
+    "dark": "Noctis Obscuro"
   },
   "buffer_font_family": "CaskaydiaCove Nerd Font",
   "multi_cursor_modifier": "cmd_or_ctrl",
@@ -30,6 +34,11 @@
           ]
         }
       }
+    }
+  },
+  "terminal": {
+    "shell": {
+      "program": "/usr/bin/fish"
     }
   },
   "lsp": {

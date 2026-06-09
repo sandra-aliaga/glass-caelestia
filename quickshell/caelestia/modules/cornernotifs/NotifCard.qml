@@ -4,19 +4,20 @@ import qs.components
 import qs.components.images
 import qs.services
 import qs.config
+import Quickshell.Services.Notifications
 import QtQuick
 import QtQuick.Layouts
 
 GlassRect {
     id: root
 
-    required property Notifs.Notif modelData
+    required property var modelData
 
     readonly property color urgencyColor: {
-        switch (modelData.urgency) {
-            case "critical": return Colours.palette.m3error
-            case "normal":   return Colours.palette.m3primary
-            default:         return Colours.palette.m3outline
+        switch (modelData?.urgency) {
+            case NotificationUrgency.Critical: return Colours.palette.m3error
+            case NotificationUrgency.Normal:   return Colours.palette.m3primary
+            default:                           return Colours.palette.m3outline
         }
     }
 
@@ -48,7 +49,7 @@ GlassRect {
             Layout.preferredWidth: 20
             Layout.preferredHeight: 20
             Layout.alignment: Qt.AlignTop
-            source: root.modelData.appIcon
+            source: root.modelData?.appIcon ?? ""
         }
 
         ColumnLayout {
@@ -57,7 +58,7 @@ GlassRect {
 
             StyledText {
                 Layout.fillWidth: true
-                text: root.modelData.summary
+                text: root.modelData?.summary ?? ""
                 elide: Text.ElideRight
                 font.pointSize: Appearance.font.size.smaller
                 color: Colours.palette.m3onSurface
@@ -66,7 +67,7 @@ GlassRect {
             StyledText {
                 Layout.fillWidth: true
                 visible: text.length > 0
-                text: root.modelData.body
+                text: root.modelData?.body ?? ""
                 elide: Text.ElideRight
                 maximumLineCount: 2
                 wrapMode: Text.WordWrap
@@ -84,7 +85,7 @@ GlassRect {
             MouseArea {
                 anchors.fill: parent
                 cursorShape: Qt.PointingHandCursor
-                onClicked: root.modelData.dismiss()
+                onClicked: root.modelData?.close()
             }
         }
     }

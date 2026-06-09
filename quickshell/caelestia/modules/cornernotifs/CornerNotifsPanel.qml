@@ -56,11 +56,11 @@ PanelWindow {
                 font.pointSize: Appearance.font.size.small
                 color: Colours.palette.m3outlineVariant
                 font.capitalization: Font.AllUppercase
-                letterSpacing: 1
+                font.letterSpacing: 1
             }
 
             Repeater {
-                model: ScriptModel { values: Notifs.list.values.slice(0, 8) }
+                model: ScriptModel { values: Notifs.list.filter(n => !n.closed).slice(0, 8) }
 
                 NotifCard {
                     Layout.fillWidth: true
@@ -71,7 +71,7 @@ PanelWindow {
             StyledText {
                 Layout.fillWidth: true
                 Layout.alignment: Qt.AlignHCenter
-                visible: Notifs.list.values.length === 0
+                visible: Notifs.list.filter(n => !n.closed).length === 0
                 text: qsTr("No notifications")
                 font.pointSize: Appearance.font.size.smaller
                 color: Colours.palette.m3outline
