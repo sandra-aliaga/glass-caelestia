@@ -26,35 +26,34 @@ Row {
     Repeater {
         model: ScriptModel { values: root.monitorWorkspaces }
 
+        // Flat rectangular indicator — the active one stretches wider
         delegate: Item {
             required property var modelData
 
             readonly property bool isActive: modelData.id === root.activeWsId
             readonly property bool isUrgent: modelData.urgent
 
-            width: 20
-            height: 20
+            width: isActive ? 36 : 22
+            height: 16
+            anchors.verticalCenter: parent.verticalCenter
+
+            Behavior on width {
+                Anim {
+                    duration: Appearance.anim.durations.small
+                    easing.bezierCurve: Appearance.anim.curves.standardDecel
+                }
+            }
 
             Rectangle {
                 anchors.fill: parent
                 color: parent.isActive
                     ? Colours.palette.m3primary
-                    : Qt.rgba(1, 1, 1, parent.isUrgent ? 0.25 : 0.10)
+                    : parent.isUrgent
+                        ? Qt.alpha(Colours.palette.m3error, 0.35)
+                        : Qt.rgba(1, 1, 1, 0.10)
                 radius: 0
 
                 Behavior on color { CAnim {} }
-            }
-
-            // Urgent dot — cleared automatically by Hyprland when workspace is visited
-            Rectangle {
-                anchors.top: parent.top
-                anchors.right: parent.right
-                anchors.margins: 2
-                width: 4
-                height: 4
-                radius: 2
-                color: Colours.palette.m3error
-                visible: parent.isUrgent && !parent.isActive
             }
 
             StyledText {

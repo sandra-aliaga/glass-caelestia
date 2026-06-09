@@ -23,8 +23,6 @@ PanelWindow {
     readonly property bool hasFullscreen: hyprMonitor?.activeWorkspace?.toplevels.values
         .some(t => t.lastIpcObject.fullscreen === 2) ?? false
 
-    readonly property int islandPadding: Appearance.padding.large
-
     screen: root.screen
     WlrLayershell.namespace: "glass-topbar"
     WlrLayershell.keyboardFocus: WlrKeyboardFocus.None
@@ -37,19 +35,14 @@ PanelWindow {
 
     color: "transparent"
 
-    // Left island — workspaces and focused window
     GlassRect {
-        id: leftIsland
+        anchors.fill: parent
 
-        anchors.left: parent.left
-        anchors.top: parent.top
-        anchors.bottom: parent.bottom
-        implicitWidth: leftRow.implicitWidth + root.islandPadding * 2
-
+        // Left section — launcher, workspaces, focused window
         RowLayout {
-            id: leftRow
-
-            anchors.centerIn: parent
+            anchors.left: parent.left
+            anchors.leftMargin: Appearance.padding.large
+            anchors.verticalCenter: parent.verticalCenter
             spacing: Appearance.spacing.normal
 
             // OS icon — opens launcher on click
@@ -74,53 +67,38 @@ PanelWindow {
                 }
             }
 
-            IslandDivider {}
+            BarDivider {}
 
             Workspaces {
                 screen: root.screen
             }
 
-            IslandDivider {}
+            BarDivider {}
 
             ActiveWindow {}
         }
-    }
 
-    // Center island — clock
-    GlassRect {
-        anchors.horizontalCenter: parent.horizontalCenter
-        anchors.top: parent.top
-        anchors.bottom: parent.bottom
-        implicitWidth: clock.implicitWidth + root.islandPadding * 2
-
+        // Center section — clock
         Clock {
-            id: clock
             anchors.centerIn: parent
         }
-    }
 
-    // Right island — system status and power
-    GlassRect {
-        anchors.right: parent.right
-        anchors.top: parent.top
-        anchors.bottom: parent.bottom
-        implicitWidth: rightRow.implicitWidth + root.islandPadding * 2
-
+        // Right section — tray, status, power
         RowLayout {
-            id: rightRow
-
-            anchors.centerIn: parent
+            anchors.right: parent.right
+            anchors.rightMargin: Appearance.padding.large
+            anchors.verticalCenter: parent.verticalCenter
             spacing: Appearance.spacing.normal
 
             Tray {}
 
-            IslandDivider {
+            BarDivider {
                 visible: SystemTray.items.values.length > 0
             }
 
             StatusIcons {}
 
-            IslandDivider {}
+            BarDivider {}
 
             PowerButton {
                 onClicked: {
@@ -131,8 +109,8 @@ PanelWindow {
         }
     }
 
-    // Thin vertical separator used between island sections
-    component IslandDivider: Rectangle {
+    // Thin vertical separator between bar sections
+    component BarDivider: Rectangle {
         implicitWidth: 1
         implicitHeight: 16
         color: Qt.rgba(1, 1, 1, 0.12)
