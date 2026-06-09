@@ -9,6 +9,7 @@ import "components"
 import Quickshell
 import Quickshell.Wayland
 import Quickshell.Hyprland
+import Quickshell.Services.SystemTray
 import QtQuick
 import QtQuick.Layouts
 
@@ -22,38 +23,45 @@ PanelWindow {
     readonly property bool hasFullscreen: hyprMonitor?.activeWorkspace?.toplevels.values
         .some(t => t.lastIpcObject.fullscreen === 2) ?? false
 
+    readonly property int islandPadding: Appearance.padding.large
+
     screen: root.screen
     WlrLayershell.namespace: "glass-topbar"
     WlrLayershell.keyboardFocus: WlrKeyboardFocus.None
 
     anchors { top: true; left: true; right: true }
-    margins { top: 10; left: 10; right: 10 }
-    exclusiveZone: hasFullscreen ? 0 : height
-    implicitHeight: 38
+    margins { top: 8; left: 12; right: 12 }
+    exclusiveZone: hasFullscreen ? 0 : height + 8
+    implicitHeight: 40
     visible: !hasFullscreen
 
     color: "transparent"
 
+    // Left island — workspaces and focused window
     GlassRect {
-        anchors.fill: parent
+        id: leftIsland
+
+        anchors.left: parent.left
+        anchors.top: parent.top
+        anchors.bottom: parent.bottom
+        implicitWidth: leftRow.implicitWidth + root.islandPadding * 2
 
         RowLayout {
-            anchors.fill: parent
-            anchors.leftMargin: Appearance.padding.normal
-            anchors.rightMargin: Appearance.padding.normal
+            id: leftRow
+
+            anchors.centerIn: parent
             spacing: Appearance.spacing.normal
 
             // OS icon — opens launcher on click
             Item {
-                Layout.preferredWidth: 20
-                Layout.preferredHeight: 20
-                Layout.alignment: Qt.AlignVCenter
+                Layout.preferredWidth: 22
+                Layout.preferredHeight: 22
 
                 ColouredIcon {
                     anchors.centerIn: parent
                     source: SysInfo.osLogo
-                    implicitSize: Appearance.font.size.large
-                    colour: Colours.palette.m3tertiary
+                    implicitSize: 18
+                    colour: Colours.palette.m3primary
                 }
 
                 MouseArea {
@@ -66,40 +74,67 @@ PanelWindow {
                 }
             }
 
+            IslandDivider {}
+
             Workspaces {
-                Layout.alignment: Qt.AlignVCenter
                 screen: root.screen
             }
 
-            ActiveWindow {
-                Layout.alignment: Qt.AlignVCenter
+            IslandDivider {}
+
+            ActiveWindow {}
+        }
+    }
+
+    // Center island — clock
+    GlassRect {
+        anchors.horizontalCenter: parent.horizontalCenter
+        anchors.top: parent.top
+        anchors.bottom: parent.bottom
+        implicitWidth: clock.implicitWidth + root.islandPadding * 2
+
+        Clock {
+            id: clock
+            anchors.centerIn: parent
+        }
+    }
+
+    // Right island — system status and power
+    GlassRect {
+        anchors.right: parent.right
+        anchors.top: parent.top
+        anchors.bottom: parent.bottom
+        implicitWidth: rightRow.implicitWidth + root.islandPadding * 2
+
+        RowLayout {
+            id: rightRow
+
+            anchors.centerIn: parent
+            spacing: Appearance.spacing.normal
+
+            Tray {}
+
+            IslandDivider {
+                visible: SystemTray.items.values.length > 0
             }
 
-            // Flexible spacer — pushes clock to center
-            Item { Layout.fillWidth: true }
+            StatusIcons {}
 
-            Clock {
-                Layout.alignment: Qt.AlignVCenter
-            }
-
-            // Flexible spacer — clock stays centered
-            Item { Layout.fillWidth: true }
-
-            StatusIcons {
-                Layout.alignment: Qt.AlignVCenter
-            }
-
-            Tray {
-                Layout.alignment: Qt.AlignVCenter
-            }
+            IslandDivider {}
 
             PowerButton {
-                Layout.alignment: Qt.AlignVCenter
                 onClicked: {
                     const vis = Visibilities.getForActive()
                     if (vis) vis.session = !vis.session
                 }
             }
         }
+    }
+
+    // Thin vertical separator used between island sections
+    component IslandDivider: Rectangle {
+        implicitWidth: 1
+        implicitHeight: 16
+        color: Qt.rgba(1, 1, 1, 0.12)
     }
 }

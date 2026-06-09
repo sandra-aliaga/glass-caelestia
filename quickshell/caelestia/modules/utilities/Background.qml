@@ -13,8 +13,9 @@ ShapePath {
     readonly property bool flatten: wrapper.height < rounding * 2
     readonly property real roundingY: flatten ? wrapper.height / 2 : rounding
 
-    strokeWidth: -1
-    fillColor: Colours.palette.m3surface
+    strokeWidth: 1
+    strokeColor: Qt.rgba(1, 1, 1, 0.1)
+    fillColor: Colours.tPalette.m3surface
 
     PathLine {
         relativeX: -(root.wrapper.width + root.rounding)

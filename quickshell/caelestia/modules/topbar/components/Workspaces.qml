@@ -21,7 +21,7 @@ Row {
         .filter(ws => ws.monitor?.name === root.monitor?.name)
         .sort((a, b) => a.id - b.id)
 
-    spacing: 4
+    spacing: 6
 
     Repeater {
         model: ScriptModel { values: root.monitorWorkspaces }
@@ -32,14 +32,14 @@ Row {
             readonly property bool isActive: modelData.id === root.activeWsId
             readonly property bool isUrgent: modelData.urgent
 
-            width: 18
-            height: 18
+            width: 20
+            height: 20
 
             Rectangle {
                 anchors.fill: parent
                 color: parent.isActive
                     ? Colours.palette.m3primary
-                    : Qt.rgba(1, 1, 1, parent.isUrgent ? 0.25 : 0.08)
+                    : Qt.rgba(1, 1, 1, parent.isUrgent ? 0.25 : 0.10)
                 radius: 0
 
                 Behavior on color { CAnim {} }

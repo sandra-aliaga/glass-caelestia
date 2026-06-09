@@ -18,8 +18,9 @@ ShapePath {
     readonly property real utilsWidthDiff: panels.utilities.width - wrapper.width
     readonly property real utilsRoundingX: utilsWidthDiff < rounding * 2 ? utilsWidthDiff / 2 : rounding
 
-    strokeWidth: -1
-    fillColor: Colours.palette.m3surface
+    strokeWidth: 1
+    strokeColor: Qt.rgba(1, 1, 1, 0.1)
+    fillColor: Colours.tPalette.m3surface
 
     PathLine {
         relativeX: -root.wrapper.width - root.notifsRoundingX
