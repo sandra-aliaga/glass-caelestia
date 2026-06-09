@@ -13,7 +13,8 @@ JsonObject {
         property int small: 0 * scale
         property int normal: 0 * scale
         property int large: 0 * scale
-        property int full: 1000 * scale
+        // Straight edges everywhere — even pills, icon chips and switches
+        property int full: 0 * scale
     }
 
     component Spacing: JsonObject {

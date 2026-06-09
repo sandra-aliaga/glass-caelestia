@@ -28,8 +28,7 @@ PanelWindow {
     WlrLayershell.keyboardFocus: WlrKeyboardFocus.None
 
     anchors { top: true; left: true; right: true }
-    margins { top: 8; left: 12; right: 12 }
-    exclusiveZone: hasFullscreen ? 0 : height + 8
+    exclusiveZone: hasFullscreen ? 0 : height
     implicitHeight: 40
     visible: !hasFullscreen
 
