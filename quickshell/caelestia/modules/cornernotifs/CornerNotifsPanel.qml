@@ -17,27 +17,37 @@ PanelWindow {
     WlrLayershell.layer: open ? WlrLayer.Overlay : WlrLayer.Top
     WlrLayershell.keyboardFocus: WlrKeyboardFocus.None
 
+    // Slide progress 0..1 — animating content instead of window size keeps it smooth
+    readonly property real reveal: open ? 1 : 0
+
     anchors { bottom: true; left: true }
     margins { bottom: 10; left: 10 }
 
-    implicitWidth: open ? 320 : 0
+    implicitWidth: 320
     implicitHeight: Math.min(
         column.implicitHeight + Appearance.padding.normal * 2,
         (screen?.height ?? 1080) * 0.4
     )
 
-    visible: implicitWidth > 0
+    visible: glass.reveal > 0.01
     color: "transparent"
 
-    Behavior on implicitWidth {
-        Anim {
-            duration: Appearance.anim.durations.expressiveDefaultSpatial
-            easing.bezierCurve: Appearance.anim.curves.expressiveDefaultSpatial
-        }
-    }
-
     GlassClippingRect {
-        anchors.fill: parent
+        id: glass
+
+        property real reveal: root.reveal
+
+        width: parent.width
+        height: parent.height
+        x: (reveal - 1) * width  // slide in from the left edge
+        opacity: reveal
+
+        Behavior on reveal {
+            Anim {
+                duration: Appearance.anim.durations.small
+                easing.bezierCurve: Appearance.anim.curves.standardDecel
+            }
+        }
 
         ColumnLayout {
             id: column

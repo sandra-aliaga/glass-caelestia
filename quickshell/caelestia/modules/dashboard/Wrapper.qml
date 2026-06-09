@@ -60,8 +60,8 @@ Item {
             Anim {
                 target: root
                 property: "implicitHeight"
-                duration: Appearance.anim.durations.expressiveDefaultSpatial
-                easing.bezierCurve: Appearance.anim.curves.expressiveDefaultSpatial
+                duration: Appearance.anim.durations.small
+                easing.bezierCurve: Appearance.anim.curves.standardDecel
             }
         },
         Transition {
@@ -71,6 +71,7 @@ Item {
             Anim {
                 target: root
                 property: "implicitHeight"
+                duration: Appearance.anim.durations.small
                 easing.bezierCurve: Appearance.anim.curves.emphasized
             }
         }

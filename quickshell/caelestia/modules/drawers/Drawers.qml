@@ -126,16 +126,11 @@ Variants {
 
             Item {
                 anchors.fill: parent
-                opacity: Colours.transparency.enabled ? Colours.transparency.base : 1
                 layer.enabled: true
                 layer.effect: MultiEffect {
                     shadowEnabled: true
                     blurMax: 15
                     shadowColor: Qt.alpha(Colours.palette.m3shadow, 0.7)
-                }
-
-                Border {
-                    bar: bar
                 }
 
                 Backgrounds {

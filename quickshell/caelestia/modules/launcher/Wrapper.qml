@@ -46,8 +46,8 @@ Item {
             target: root
             property: "implicitHeight"
             to: root.contentHeight
-            duration: Appearance.anim.durations.expressiveDefaultSpatial
-            easing.bezierCurve: Appearance.anim.curves.expressiveDefaultSpatial
+            duration: Appearance.anim.durations.small
+            easing.bezierCurve: Appearance.anim.curves.standardDecel
         }
         ScriptAction {
             script: root.implicitHeight = Qt.binding(() => content.implicitHeight)
@@ -63,6 +63,7 @@ Item {
         Anim {
             target: root
             property: "implicitHeight"
+            duration: Appearance.anim.durations.small
             to: 0
             easing.bezierCurve: Appearance.anim.curves.emphasized
         }

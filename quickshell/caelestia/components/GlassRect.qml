@@ -5,13 +5,8 @@ import QtQuick
 Rectangle {
     id: root
 
-    // Dynamic tint from Material You surface color; alpha from transparency config
-    color: Qt.rgba(
-        Colours.palette.m3surface.r,
-        Colours.palette.m3surface.g,
-        Colours.palette.m3surface.b,
-        Appearance.transparency.enabled ? 0.55 : 0.92
-    )
+    // Same translucent surface as every other shell panel (alpha from transparency config)
+    color: Colours.tPalette.m3surface
     radius: 0
     border.color: Qt.rgba(1, 1, 1, 0.1)
     border.width: 1

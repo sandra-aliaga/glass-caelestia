@@ -18,6 +18,10 @@ Item {
     required property PersistentProperties visibilities
     required property Item bar
 
+    // Clearance below the floating top bar: 10 top margin + 38 bar + 10 gap,
+    // minus the border thickness already applied to this item's margins
+    readonly property real topBarOffset: 58 - Config.border.thickness
+
     readonly property alias osd: osd
     readonly property alias notifications: notifications
     readonly property alias session: session
@@ -51,6 +55,7 @@ Item {
         panels: root
 
         anchors.top: parent.top
+        anchors.topMargin: root.topBarOffset
         anchors.right: parent.right
     }
 
@@ -84,6 +89,7 @@ Item {
 
         anchors.horizontalCenter: parent.horizontalCenter
         anchors.top: parent.top
+        anchors.topMargin: root.topBarOffset
     }
 
     BarPopouts.Wrapper {

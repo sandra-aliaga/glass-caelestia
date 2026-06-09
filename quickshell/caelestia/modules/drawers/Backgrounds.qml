@@ -34,7 +34,7 @@ Shape {
         sidebar: sidebar
 
         startX: root.width
-        startY: 0
+        startY: root.panels.notifications.y
     }
 
     Session.Background {
@@ -55,7 +55,7 @@ Shape {
         wrapper: root.panels.dashboard
 
         startX: (root.width - wrapper.width) / 2 - rounding
-        startY: 0
+        startY: root.panels.dashboard.y
     }
 
     BarPopouts.Background {
@@ -81,6 +81,6 @@ Shape {
         panels: root.panels
 
         startX: root.width
-        startY: root.panels.notifications.height
+        startY: root.panels.sidebar.y
     }
 }
