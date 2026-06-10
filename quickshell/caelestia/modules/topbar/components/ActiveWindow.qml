@@ -18,6 +18,8 @@ Item {
 
         text: Hypr.activeToplevel?.title ?? qsTr("Desktop")
         elide: Text.ElideRight
+        font.family: Appearance.font.family.mono
+        font.italic: true
         font.pointSize: Appearance.font.size.smaller
         color: Colours.palette.m3onSurfaceVariant
     }
