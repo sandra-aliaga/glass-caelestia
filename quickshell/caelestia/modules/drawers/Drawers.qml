@@ -187,5 +187,47 @@ Variants {
                 }
             }
         }
+
+        PanelWindow {
+            id: osdEdgeStrip
+
+            screen: scope.modelData
+            WlrLayershell.namespace: "glass-osd-edge"
+            WlrLayershell.keyboardFocus: WlrKeyboardFocus.None
+            WlrLayershell.exclusionMode: ExclusionMode.Ignore
+            WlrLayershell.layer: WlrLayer.Overlay
+
+            anchors { right: true; top: true; bottom: true }
+            exclusiveZone: 0
+            implicitWidth: 4
+            color: "transparent"
+
+            readonly property bool hasFullscreen: Hypr.monitorFor(osdEdgeStrip.screen)?.activeWorkspace?.toplevels.values
+                .some(t => t.lastIpcObject.fullscreen === 2) ?? false
+            visible: !hasFullscreen
+
+            Timer {
+                id: osdHideTimer
+                interval: 150
+                onTriggered: {
+                    const vis = Visibilities.getForScreen(osdEdgeStrip.screen)
+                    if (!vis) return
+                    const p = Visibilities.panels.get(Hypr.monitorFor(osdEdgeStrip.screen))
+                    if (p && p.osd.hovered) return
+                    vis.osd = false
+                }
+            }
+
+            MouseArea {
+                anchors.fill: parent
+                hoverEnabled: true
+                onEntered: {
+                    osdHideTimer.stop()
+                    const vis = Visibilities.getForScreen(osdEdgeStrip.screen)
+                    if (vis) vis.osd = true
+                }
+                onExited: osdHideTimer.start()
+            }
+        }
     }
 }

@@ -15,6 +15,10 @@ Singleton {
         return screens.get(Hypr.focusedMonitor);
     }
 
+    function getForScreen(screen: ShellScreen): PersistentProperties {
+        return screens.get(Hypr.monitorFor(screen));
+    }
+
     function showPopout(monitor, name: string): void {
         const p = panels.get(monitor)
         if (!p) return
