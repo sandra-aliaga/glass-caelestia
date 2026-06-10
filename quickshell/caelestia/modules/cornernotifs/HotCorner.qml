@@ -1,3 +1,4 @@
+import qs.services
 import Quickshell
 import Quickshell.Wayland
 import QtQuick
@@ -8,6 +9,9 @@ PanelWindow {
 
     signal triggered()
     signal released()
+
+    // Focus follows the mouse across monitors, so this keeps the corner under the cursor
+    screen: Hypr.focusedScreen
 
     WlrLayershell.namespace: "glass-hotcorner"
     WlrLayershell.keyboardFocus: WlrKeyboardFocus.None

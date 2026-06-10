@@ -19,6 +19,8 @@ Singleton {
     readonly property HyprlandToplevel activeToplevel: Hyprland.activeToplevel?.wayland?.activated ? Hyprland.activeToplevel : null
     readonly property HyprlandWorkspace focusedWorkspace: Hyprland.focusedWorkspace
     readonly property HyprlandMonitor focusedMonitor: Hyprland.focusedMonitor
+    // ShellScreen of the focused monitor (HyprlandMonitor has no screen property)
+    readonly property ShellScreen focusedScreen: [...Quickshell.screens].find(s => s.name === focusedMonitor?.name) ?? Quickshell.screens[0]
     readonly property int activeWsId: focusedWorkspace?.id ?? 1
 
     readonly property HyprKeyboard keyboard: extras.devices.keyboards.find(kb => kb.main) ?? null

@@ -18,9 +18,9 @@ Item {
     required property PersistentProperties visibilities
     required property Item bar
 
-    // Clearance below the floating top bar: 10 top margin + 38 bar + 10 gap,
+    // Clearance below the flush top bar (40px tall) plus a small gap,
     // minus the border thickness already applied to this item's margins
-    readonly property real topBarOffset: 58 - Config.border.thickness
+    readonly property real topBarOffset: 45 - Config.border.thickness
 
     readonly property alias osd: osd
     readonly property alias notifications: notifications

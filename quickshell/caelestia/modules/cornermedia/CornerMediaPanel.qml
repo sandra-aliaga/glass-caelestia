@@ -11,6 +11,9 @@ PanelWindow {
 
     property bool open: false
 
+    // Follow the focused monitor so the panel opens where the user is working
+    screen: Hypr.focusedScreen
+
     WlrLayershell.namespace: "glass-corner-media"
     WlrLayershell.layer: open ? WlrLayer.Overlay : WlrLayer.Top
     WlrLayershell.keyboardFocus: WlrKeyboardFocus.None

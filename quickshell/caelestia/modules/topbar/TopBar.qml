@@ -16,14 +16,11 @@ import QtQuick.Layouts
 PanelWindow {
     id: root
 
-    required property ShellScreen screen
-
     readonly property var hyprMonitor: Hypr.monitorFor(screen)
     // Slide bar out when there's a fullscreen window on this monitor
     readonly property bool hasFullscreen: hyprMonitor?.activeWorkspace?.toplevels.values
         .some(t => t.lastIpcObject.fullscreen === 2) ?? false
 
-    screen: root.screen
     WlrLayershell.namespace: "glass-topbar"
     WlrLayershell.keyboardFocus: WlrKeyboardFocus.None
 
