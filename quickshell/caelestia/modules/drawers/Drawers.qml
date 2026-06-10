@@ -180,7 +180,10 @@ Variants {
 
                     disabled: true  // replaced by TopBar in glass theme
 
-                    Component.onCompleted: Visibilities.bars.set(scope.modelData, this)
+                    Component.onCompleted: {
+                        Visibilities.bars.set(scope.modelData, this)
+                        Visibilities.panels.set(Hypr.monitorFor(scope.modelData), panels)
+                    }
                 }
             }
         }

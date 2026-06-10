@@ -17,7 +17,6 @@ PanelWindow {
     id: root
 
     readonly property var hyprMonitor: Hypr.monitorFor(screen)
-    // Slide bar out when there's a fullscreen window on this monitor
     readonly property bool hasFullscreen: hyprMonitor?.activeWorkspace?.toplevels.values
         .some(t => t.lastIpcObject.fullscreen === 2) ?? false
 
@@ -33,6 +32,22 @@ PanelWindow {
 
     GlassRect {
         anchors.fill: parent
+
+        // Drag downward from any empty area of the bar to open dashboard
+        MouseArea {
+            id: dragArea
+            anchors.fill: parent
+            z: -1
+            property real pressY: 0
+            onPressed: event => { pressY = event.y }
+            onPositionChanged: event => {
+                if (event.y - pressY > Config.dashboard.dragThreshold) {
+                    const vis = Visibilities.getForActive()
+                    if (vis && !vis.dashboard) vis.dashboard = true
+                }
+            }
+            onReleased: pressY = 0
+        }
 
         // Left section — launcher, workspaces, focused window
         RowLayout {
@@ -92,7 +107,9 @@ PanelWindow {
                 visible: SystemTray.items.values.length > 0
             }
 
-            StatusIcons {}
+            StatusIcons {
+                screen: root.screen
+            }
 
             BarDivider {}
 

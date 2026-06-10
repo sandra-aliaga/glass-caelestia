@@ -4,6 +4,7 @@ import qs.components
 import qs.services
 import qs.utils
 import qs.config
+import Quickshell
 import Quickshell.Bluetooth
 import Quickshell.Services.UPower
 import QtQuick
@@ -11,61 +12,128 @@ import QtQuick
 Row {
     id: root
 
+    required property ShellScreen screen
+
     property color colour: Colours.palette.m3secondary
 
     spacing: Appearance.spacing.small / 2
 
-    MaterialIcon {
+    // Audio
+    Item {
         visible: Config.bar.status.showAudio
-        animate: true
-        text: Icons.getVolumeIcon(Audio.volume, Audio.muted)
-        color: root.colour
-        font.pointSize: Appearance.font.size.normal
+        implicitWidth: audioIcon.implicitWidth
+        implicitHeight: audioIcon.implicitHeight
+
+        MaterialIcon {
+            id: audioIcon
+            anchors.centerIn: parent
+            animate: true
+            text: Icons.getVolumeIcon(Audio.volume, Audio.muted)
+            color: root.colour
+            font.pointSize: Appearance.font.size.normal
+        }
+        MouseArea {
+            anchors.fill: parent
+            cursorShape: Qt.PointingHandCursor
+            onClicked: Visibilities.showPopout(Hypr.monitorFor(root.screen), "audio")
+        }
     }
 
-    MaterialIcon {
+    // WiFi
+    Item {
         visible: Config.bar.status.showNetwork && (!Nmcli.activeEthernet || Config.bar.status.showWifi)
-        animate: true
-        text: Nmcli.active ? Icons.getNetworkIcon(Nmcli.active.strength ?? 0) : "wifi_off"
-        color: root.colour
-        font.pointSize: Appearance.font.size.normal
+        implicitWidth: wifiIcon.implicitWidth
+        implicitHeight: wifiIcon.implicitHeight
+
+        MaterialIcon {
+            id: wifiIcon
+            anchors.centerIn: parent
+            animate: true
+            text: Nmcli.active ? Icons.getNetworkIcon(Nmcli.active.strength ?? 0) : "wifi_off"
+            color: root.colour
+            font.pointSize: Appearance.font.size.normal
+        }
+        MouseArea {
+            anchors.fill: parent
+            cursorShape: Qt.PointingHandCursor
+            onClicked: Visibilities.showPopout(Hypr.monitorFor(root.screen), "network")
+        }
     }
 
-    MaterialIcon {
+    // Ethernet
+    Item {
         visible: Config.bar.status.showNetwork && Nmcli.activeEthernet
-        animate: true
-        text: "cable"
-        color: root.colour
-        font.pointSize: Appearance.font.size.normal
+        implicitWidth: ethernetIcon.implicitWidth
+        implicitHeight: ethernetIcon.implicitHeight
+
+        MaterialIcon {
+            id: ethernetIcon
+            anchors.centerIn: parent
+            animate: true
+            text: "cable"
+            color: root.colour
+            font.pointSize: Appearance.font.size.normal
+        }
+        MouseArea {
+            anchors.fill: parent
+            cursorShape: Qt.PointingHandCursor
+            onClicked: Visibilities.showPopout(Hypr.monitorFor(root.screen), "ethernet")
+        }
     }
 
-    MaterialIcon {
+    // Bluetooth
+    Item {
         visible: Config.bar.status.showBluetooth
-        animate: true
-        text: {
-            if (!Bluetooth.defaultAdapter?.enabled) return "bluetooth_disabled"
-            if (Bluetooth.devices.values.some(d => d.connected)) return "bluetooth_connected"
-            return "bluetooth"
+        implicitWidth: btIcon.implicitWidth
+        implicitHeight: btIcon.implicitHeight
+
+        MaterialIcon {
+            id: btIcon
+            anchors.centerIn: parent
+            animate: true
+            text: {
+                if (!Bluetooth.defaultAdapter?.enabled) return "bluetooth_disabled"
+                if (Bluetooth.devices.values.some(d => d.connected)) return "bluetooth_connected"
+                return "bluetooth"
+            }
+            color: root.colour
+            font.pointSize: Appearance.font.size.normal
         }
-        color: root.colour
-        font.pointSize: Appearance.font.size.normal
+        MouseArea {
+            anchors.fill: parent
+            cursorShape: Qt.PointingHandCursor
+            onClicked: Visibilities.showPopout(Hypr.monitorFor(root.screen), "bluetooth")
+        }
     }
 
-    MaterialIcon {
+    // Battery
+    Item {
         visible: Config.bar.status.showBattery && UPower.displayDevice.isLaptopBattery
-        animate: true
-        text: {
-            const perc = UPower.displayDevice.percentage
-            const charging = [UPowerDeviceState.Charging, UPowerDeviceState.FullyCharged, UPowerDeviceState.PendingCharge].includes(UPower.displayDevice.state)
-            if (perc === 1) return charging ? "battery_charging_full" : "battery_full"
-            let level = Math.floor(perc * 7)
-            if (charging && (level === 4 || level === 1)) level--
-            return charging ? `battery_charging_${(level + 3) * 10}` : `battery_${level}_bar`
+        implicitWidth: battIcon.implicitWidth
+        implicitHeight: battIcon.implicitHeight
+
+        MaterialIcon {
+            id: battIcon
+            anchors.centerIn: parent
+            animate: true
+            text: {
+                const perc = UPower.displayDevice.percentage
+                const charging = [UPowerDeviceState.Charging, UPowerDeviceState.FullyCharged, UPowerDeviceState.PendingCharge].includes(UPower.displayDevice.state)
+                if (perc === 1) return charging ? "battery_charging_full" : "battery_full"
+                let level = Math.floor(perc * 7)
+                if (charging && (level === 4 || level === 1)) level--
+                return charging ? `battery_charging_${(level + 3) * 10}` : `battery_${level}_bar`
+            }
+            color: !UPower.onBattery || UPower.displayDevice.percentage > 0.2
+                ? root.colour
+                : Colours.palette.m3error
+            fill: 1
+            font.pointSize: Appearance.font.size.normal
         }
-        color: !UPower.onBattery || UPower.displayDevice.percentage > 0.2
-            ? root.colour
-            : Colours.palette.m3error
-        fill: 1
-        font.pointSize: Appearance.font.size.normal
+        MouseArea {
+            anchors.fill: parent
+            cursorShape: Qt.PointingHandCursor
+            onClicked: Visibilities.showPopout(Hypr.monitorFor(root.screen), "battery")
+        }
     }
 }

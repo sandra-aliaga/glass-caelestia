@@ -16,17 +16,19 @@ Row {
     readonly property var monitor: Hypr.monitorFor(screen)
     readonly property int activeWsId: monitor?.activeWorkspace?.id ?? 1
 
-    // Only workspaces belonging to this monitor, sorted by id
+    // Regular workspaces only (id >= 0) — special workspaces have negative IDs
     readonly property var monitorWorkspaces: Hypr.workspaces.values
-        .filter(ws => ws.monitor?.name === root.monitor?.name)
+        .filter(ws => ws.monitor?.name === root.monitor?.name && ws.id >= 0)
         .sort((a, b) => a.id - b.id)
+
+    // Whether a special workspace is currently visible on this monitor
+    readonly property bool hasSpecialWs: !!(monitor?.lastIpcObject?.specialWorkspace?.name)
 
     spacing: 6
 
     Repeater {
         model: ScriptModel { values: root.monitorWorkspaces }
 
-        // Flat rectangular indicator — the active one stretches wider
         delegate: Item {
             required property var modelData
 
@@ -70,6 +72,24 @@ Row {
                 cursorShape: Qt.PointingHandCursor
                 onClicked: Hypr.dispatch(`workspace ${modelData.id}`)
             }
+        }
+    }
+
+    // Special workspace indicator — small accent dot when one is active
+    Rectangle {
+        visible: root.hasSpecialWs
+        width: 6
+        height: 6
+        radius: 0
+        anchors.verticalCenter: parent.verticalCenter
+        color: Colours.palette.m3tertiary
+
+        Behavior on opacity { CAnim {} }
+
+        MouseArea {
+            anchors.fill: parent
+            cursorShape: Qt.PointingHandCursor
+            onClicked: Hypr.dispatch("togglespecialworkspace")
         }
     }
 }
