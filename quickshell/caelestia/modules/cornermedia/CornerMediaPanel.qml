@@ -66,82 +66,49 @@ PanelWindow {
             }
             spacing: Appearance.spacing.normal
 
-            // ── Toasts section ────────────────────────────────────────────
-            StyledText {
-                visible: root.activeToasts.length > 0
-                Layout.fillWidth: true
-                text: qsTr("Notifications")
-                font.pointSize: Appearance.font.size.small
-                color: Colours.palette.m3outlineVariant
-                font.capitalization: Font.AllUppercase
-                font.letterSpacing: 1
-            }
-
+            // ── Toasts section (flat single-line rows, intentionally subtle) ──
             Repeater {
                 model: ScriptModel { values: root.activeToasts.slice(0, 4) }
 
-                delegate: GlassRect {
+                delegate: RowLayout {
+                    id: toastRow
+
                     required property Toast modelData
 
                     Layout.fillWidth: true
-                    implicitHeight: toastLayout.implicitHeight + Appearance.padding.smaller * 2
+                    spacing: Appearance.spacing.small
+                    opacity: 0.85
 
-                    RowLayout {
-                        id: toastLayout
-
-                        anchors {
-                            left: parent.left
-                            right: parent.right
-                            verticalCenter: parent.verticalCenter
-                            margins: Appearance.padding.smaller
-                            leftMargin: Appearance.padding.normal
+                    MaterialIcon {
+                        text: toastRow.modelData.icon || "info"
+                        color: {
+                            if (toastRow.modelData.type === Toast.Success) return Colours.palette.m3primary
+                            if (toastRow.modelData.type === Toast.Error) return Colours.palette.m3error
+                            if (toastRow.modelData.type === Toast.Warning) return Colours.palette.m3secondary
+                            return Colours.palette.m3outlineVariant
                         }
-                        spacing: Appearance.spacing.small
+                        font.pointSize: Appearance.font.size.small
+                    }
 
-                        MaterialIcon {
-                            text: modelData.icon || "notifications"
-                            color: {
-                                if (modelData.type === Toast.Success) return Colours.palette.m3primary
-                                if (modelData.type === Toast.Error) return Colours.palette.m3error
-                                if (modelData.type === Toast.Warning) return Colours.palette.m3secondary
-                                return Colours.palette.m3onSurfaceVariant
-                            }
-                            font.pointSize: Appearance.font.size.normal
-                        }
+                    StyledText {
+                        Layout.fillWidth: true
+                        text: toastRow.modelData.message.length > 0
+                            ? `${toastRow.modelData.title} — ${toastRow.modelData.message}`
+                            : toastRow.modelData.title
+                        font.pointSize: Appearance.font.size.small
+                        color: Colours.palette.m3onSurfaceVariant
+                        elide: Text.ElideRight
+                    }
 
-                        ColumnLayout {
-                            Layout.fillWidth: true
-                            spacing: 0
+                    MaterialIcon {
+                        text: "close"
+                        font.pointSize: Appearance.font.size.small
+                        color: Colours.palette.m3outlineVariant
 
-                            StyledText {
-                                Layout.fillWidth: true
-                                text: modelData.title
-                                font.pointSize: Appearance.font.size.smaller
-                                color: Colours.palette.m3onSurface
-                                elide: Text.ElideRight
-                            }
-
-                            StyledText {
-                                Layout.fillWidth: true
-                                visible: text.length > 0
-                                text: modelData.message
-                                font.pointSize: Appearance.font.size.small
-                                color: Colours.palette.m3onSurfaceVariant
-                                elide: Text.ElideRight
-                                opacity: 0.8
-                            }
-                        }
-
-                        MaterialIcon {
-                            text: "close"
-                            font.pointSize: Appearance.font.size.small
-                            color: Colours.palette.m3outlineVariant
-
-                            MouseArea {
-                                anchors.fill: parent
-                                cursorShape: Qt.PointingHandCursor
-                                onClicked: modelData.close()
-                            }
+                        MouseArea {
+                            anchors.fill: parent
+                            cursorShape: Qt.PointingHandCursor
+                            onClicked: toastRow.modelData.close()
                         }
                     }
                 }
