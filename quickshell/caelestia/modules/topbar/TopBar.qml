@@ -107,6 +107,10 @@ PanelWindow {
                 visible: SystemTray.items.values.length > 0
             }
 
+            CpuTemp {}
+
+            BarDivider {}
+
             StatusIcons {
                 screen: root.screen
             }
