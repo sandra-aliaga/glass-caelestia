@@ -18,6 +18,26 @@ Row {
 
     spacing: Appearance.spacing.small / 2
 
+    // Do not disturb toggle
+    Item {
+        implicitWidth: dndIcon.implicitWidth
+        implicitHeight: dndIcon.implicitHeight
+
+        MaterialIcon {
+            id: dndIcon
+            anchors.centerIn: parent
+            animate: true
+            text: Notifs.dnd ? "notifications_off" : "notifications"
+            color: Notifs.dnd ? Colours.palette.m3primary : root.colour
+            font.pointSize: Appearance.font.size.normal
+        }
+        MouseArea {
+            anchors.fill: parent
+            cursorShape: Qt.PointingHandCursor
+            onClicked: Notifs.dnd = !Notifs.dnd
+        }
+    }
+
     // Audio
     Item {
         visible: Config.bar.status.showAudio
