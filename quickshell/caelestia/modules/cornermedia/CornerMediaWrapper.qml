@@ -15,7 +15,7 @@ Item {
         return Toaster.toasts.some(t => !t.closed)
     }
 
-    readonly property bool open: userOpen || hasToasts
+    readonly property bool open: userOpen || hasToasts || (loader.item?.hold ?? false)
 
     Timer {
         id: closeTimer
@@ -62,6 +62,8 @@ Item {
     }
 
     LazyLoader {
+        id: loader
+
         loading: true  // preload in background at shell start
 
         CornerMediaPanel {

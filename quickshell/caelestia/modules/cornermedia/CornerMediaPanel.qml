@@ -7,6 +7,7 @@ import Caelestia
 import Quickshell
 import Quickshell.Wayland
 import QtQuick
+import QtQuick.Controls
 import QtQuick.Layouts
 
 PanelWindow {
@@ -14,12 +15,16 @@ PanelWindow {
 
     property bool open: false
 
+    // Keeps the wrapper from closing the panel while in use
+    readonly property bool hold: panelHover.hovered || notesArea.activeFocus
+
     // Follow the focused monitor so the panel opens where the user is working
     screen: Hypr.focusedScreen
 
     WlrLayershell.namespace: "glass-corner-media"
     WlrLayershell.layer: open ? WlrLayer.Overlay : WlrLayer.Top
-    WlrLayershell.keyboardFocus: WlrKeyboardFocus.None
+    // OnDemand so the notes area can take keyboard focus when clicked
+    WlrLayershell.keyboardFocus: open ? WlrKeyboardFocus.OnDemand : WlrKeyboardFocus.None
 
     readonly property real reveal: open ? 1 : 0
 
@@ -53,6 +58,10 @@ PanelWindow {
                 duration: Appearance.anim.durations.small
                 easing.bezierCurve: Appearance.anim.curves.standardDecel
             }
+        }
+
+        HoverHandler {
+            id: panelHover
         }
 
         ColumnLayout {
@@ -163,6 +172,57 @@ PanelWindow {
             }
 
             DailyLogView { Layout.fillWidth: true }
+
+            Rectangle {
+                Layout.fillWidth: true
+                height: 1
+                color: Qt.rgba(1, 1, 1, 0.08)
+            }
+
+            // ── Quick notes section ───────────────────────────────────────
+            StyledText {
+                Layout.fillWidth: true
+                text: qsTr("Notes")
+                font.pointSize: Appearance.font.size.small
+                color: Colours.palette.m3outlineVariant
+                font.capitalization: Font.AllUppercase
+                font.letterSpacing: 1
+            }
+
+            Flickable {
+                Layout.fillWidth: true
+                Layout.preferredHeight: Math.min(notesArea.implicitHeight, 120)
+                contentWidth: width
+                contentHeight: notesArea.implicitHeight
+                boundsBehavior: Flickable.StopAtBounds
+                clip: true
+
+                TextArea.flickable: TextArea {
+                    id: notesArea
+
+                    wrapMode: TextEdit.Wrap
+                    text: Scratchpad.text
+                    onTextChanged: Scratchpad.setText(text)
+                    Keys.onEscapePressed: focus = false
+
+                    placeholderText: qsTr("Quick notes…")
+                    placeholderTextColor: Colours.palette.m3outline
+                    color: Colours.palette.m3onSurface
+                    font.family: Appearance.font.family.sans
+                    font.pointSize: Appearance.font.size.small
+                    padding: 0
+                    background: null
+
+                    Connections {
+                        target: Scratchpad
+
+                        function onTextChanged(): void {
+                            if (notesArea.text !== Scratchpad.text)
+                                notesArea.text = Scratchpad.text;
+                        }
+                    }
+                }
+            }
         }
     }
 }
