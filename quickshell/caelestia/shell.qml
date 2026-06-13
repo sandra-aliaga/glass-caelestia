@@ -10,6 +10,7 @@ import "modules/lock"
 import "modules/topbar"
 import "modules/cornernotifs"
 import "modules/cornermedia"
+import "modules/cheatsheet"
 import Quickshell
 
 ShellRoot {
@@ -30,4 +31,5 @@ ShellRoot {
     TopBarWrapper {}
     CornerNotifsWrapper {}
     CornerMediaWrapper {}
+    CheatsheetWrapper {}
 }
