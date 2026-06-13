@@ -28,6 +28,8 @@ import recurring_ical_events
 ENV_VAR = "CAELESTIA_CALENDAR_URL"
 # script is at <repo>/quickshell/caelestia/utils/scripts/calendar-agenda.py
 ENV_FILE = Path(__file__).resolve().parents[4] / ".env"
+STATE_HOME = Path(os.environ.get("XDG_STATE_HOME", Path.home() / ".local/state"))
+CACHE_FILE = STATE_HOME / "caelestia" / "calendar-cache.json"
 DAYS_AHEAD = 7
 
 
@@ -51,6 +53,23 @@ def fail(message: str) -> None:
     sys.exit(0)
 
 
+def write_cache(events: list) -> None:
+    try:
+        CACHE_FILE.parent.mkdir(parents=True, exist_ok=True)
+        CACHE_FILE.write_text(json.dumps(events, ensure_ascii=False), encoding="utf-8")
+    except Exception:  # noqa: BLE001 - cache is best effort
+        pass
+
+
+def serve_cache_or_fail(message: str) -> None:
+    """When we can't reach/parse the calendar, fall back to the last good
+    result so the agenda keeps showing something offline."""
+    if CACHE_FILE.exists():
+        print(CACHE_FILE.read_text(encoding="utf-8"))
+        sys.exit(0)
+    fail(message)
+
+
 def main() -> None:
     url = resolve_url()
     if not url:
@@ -61,12 +80,12 @@ def main() -> None:
         with urllib.request.urlopen(req, timeout=20) as resp:
             raw = resp.read()
     except Exception as exc:  # noqa: BLE001 - surface any fetch problem
-        fail(f"fetch failed: {exc}")
+        serve_cache_or_fail(f"fetch failed: {exc}")
 
     try:
         cal = icalendar.Calendar.from_ical(raw)
     except Exception as exc:  # noqa: BLE001
-        fail(f"parse failed: {exc}")
+        serve_cache_or_fail(f"parse failed: {exc}")
 
     now = datetime.now().astimezone()
     start = now - timedelta(hours=12)  # keep events already in progress today
@@ -75,7 +94,7 @@ def main() -> None:
     try:
         occurrences = recurring_ical_events.of(cal).between(start, end)
     except Exception as exc:  # noqa: BLE001
-        fail(f"recurrence expansion failed: {exc}")
+        serve_cache_or_fail(f"recurrence expansion failed: {exc}")
 
     events = []
     for ev in occurrences:
@@ -102,6 +121,7 @@ def main() -> None:
         })
 
     events.sort(key=lambda e: e["start"])
+    write_cache(events)
     print(json.dumps(events, ensure_ascii=False))
 
 
