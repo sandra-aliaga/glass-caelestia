@@ -20,7 +20,7 @@ JsonObject {
         property bool dndChanged: true
         property bool audioOutputChanged: true
         property bool audioInputChanged: true
-        property bool capsLockChanged: true
+        property bool capsLockChanged: false
         property bool numLockChanged: true
         property bool kbLayoutChanged: true
         property bool kbLimit: true
