@@ -15,6 +15,10 @@ PanelWindow {
 
     property bool open: false
 
+    // Only true while the user is actively editing the notes — gates keyboard
+    // focus so the panel never steals focus when it just appears (toasts, etc.)
+    property bool notesEditing: false
+
     // Keeps the wrapper from closing the panel while in use
     readonly property bool hold: panelHover.hovered || notesArea.activeFocus
 
@@ -23,8 +27,10 @@ PanelWindow {
 
     WlrLayershell.namespace: "glass-corner-media"
     WlrLayershell.layer: open ? WlrLayer.Overlay : WlrLayer.Top
-    // OnDemand so the notes area can take keyboard focus when clicked
-    WlrLayershell.keyboardFocus: open ? WlrKeyboardFocus.OnDemand : WlrKeyboardFocus.None
+    // Grab keyboard only while editing notes, never just because it's visible
+    WlrLayershell.keyboardFocus: notesEditing ? WlrKeyboardFocus.OnDemand : WlrKeyboardFocus.None
+
+    onOpenChanged: if (!open) notesEditing = false
 
     readonly property real reveal: open ? 1 : 0
 
@@ -203,7 +209,20 @@ PanelWindow {
                     wrapMode: TextEdit.Wrap
                     text: Scratchpad.text
                     onTextChanged: Scratchpad.setText(text)
-                    Keys.onEscapePressed: focus = false
+                    onActiveFocusChanged: if (!activeFocus) root.notesEditing = false
+                    Keys.onEscapePressed: {
+                        root.notesEditing = false;
+                        focus = false;
+                    }
+
+                    // Pointer events reach us even with no keyboard focus; this
+                    // flips the surface to OnDemand, then we grab focus
+                    TapHandler {
+                        onTapped: {
+                            root.notesEditing = true;
+                            Qt.callLater(() => notesArea.forceActiveFocus());
+                        }
+                    }
 
                     placeholderText: qsTr("Quick notes…")
                     placeholderTextColor: Colours.palette.m3outline
