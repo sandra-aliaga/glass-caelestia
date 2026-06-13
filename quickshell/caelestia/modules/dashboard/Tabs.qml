@@ -51,8 +51,8 @@ Item {
         }
 
         Tab {
-            iconName: "checklist"
-            text: qsTr("TODOs")
+            iconName: "calendar_month"
+            text: qsTr("Agenda")
         }
     }
 

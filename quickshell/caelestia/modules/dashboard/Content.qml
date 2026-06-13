@@ -114,7 +114,7 @@ Item {
 
                 Pane {
                     index: 4
-                    sourceComponent: Todo {}
+                    sourceComponent: Agenda {}
                 }
             }
 

@@ -10,3 +10,5 @@
 /fish/conf.d/
 
 .SRCINFO
+
+/.env
