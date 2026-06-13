@@ -62,8 +62,9 @@ Item {
             }
         }
 
-        DailyReminder {
-            Layout.topMargin: Appearance.spacing.normal
-        }
+        // Oculto mientras no estoy trabajando — descomentar para reactivar
+        // DailyReminder {
+        //     Layout.topMargin: Appearance.spacing.normal
+        // }
     }
 }

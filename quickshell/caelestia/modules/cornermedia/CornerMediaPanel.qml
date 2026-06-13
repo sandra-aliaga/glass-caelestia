@@ -168,22 +168,17 @@ PanelWindow {
             }
 
             // ── Daily log section ─────────────────────────────────────────
-            StyledText {
-                Layout.fillWidth: true
-                text: qsTr("Daily log")
-                font.pointSize: Appearance.font.size.small
-                color: Colours.palette.m3outlineVariant
-                font.capitalization: Font.AllUppercase
-                font.letterSpacing: 1
-            }
+            // Oculto mientras no estoy trabajando — descomentar para reactivar
+            // StyledText {
+            //     Layout.fillWidth: true
+            //     text: qsTr("Daily log")
+            //     font.pointSize: Appearance.font.size.small
+            //     color: Colours.palette.m3outlineVariant
+            //     font.capitalization: Font.AllUppercase
+            //     font.letterSpacing: 1
+            // }
 
-            DailyLogView { Layout.fillWidth: true }
-
-            Rectangle {
-                Layout.fillWidth: true
-                height: 1
-                color: Qt.rgba(1, 1, 1, 0.08)
-            }
+            // DailyLogView { Layout.fillWidth: true }
 
             // ── Quick notes section ───────────────────────────────────────
             StyledText {
