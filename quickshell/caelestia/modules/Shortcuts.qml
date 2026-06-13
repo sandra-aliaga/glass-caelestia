@@ -90,6 +90,14 @@ Scope {
     }
 
     IpcHandler {
+        target: "popouts"
+
+        function open(name: string): void {
+            Visibilities.showPopout(Hypr.focusedMonitor, name);
+        }
+    }
+
+    IpcHandler {
         target: "controlCenter"
 
         function open(): void {

@@ -113,5 +113,7 @@ JsonObject {
         property int batteryWidth: 250
         property int networkWidth: 320
         property int kbLayoutWidth: 320
+        property int clipboardWidth: 320
+        property int clipboardHeight: 300
     }
 }

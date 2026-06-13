@@ -18,6 +18,25 @@ Row {
 
     spacing: Appearance.spacing.small / 2
 
+    // Clipboard history
+    Item {
+        implicitWidth: clipboardIcon.implicitWidth
+        implicitHeight: clipboardIcon.implicitHeight
+
+        MaterialIcon {
+            id: clipboardIcon
+            anchors.centerIn: parent
+            text: "content_paste"
+            color: root.colour
+            font.pointSize: Appearance.font.size.normal
+        }
+        MouseArea {
+            anchors.fill: parent
+            cursorShape: Qt.PointingHandCursor
+            onClicked: Visibilities.showPopout(Hypr.monitorFor(root.screen), "clipboard")
+        }
+    }
+
     // Do not disturb toggle
     Item {
         implicitWidth: dndIcon.implicitWidth

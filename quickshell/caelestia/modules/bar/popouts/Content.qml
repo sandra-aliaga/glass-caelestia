@@ -115,6 +115,13 @@ Item {
         }
 
         Popout {
+            name: "clipboard"
+            sourceComponent: Clipboard {
+                wrapper: root.wrapper
+            }
+        }
+
+        Popout {
             name: "kblayout"
             sourceComponent: KbLayout {
                 wrapper: root.wrapper
