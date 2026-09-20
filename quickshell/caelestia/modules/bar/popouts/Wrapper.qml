@@ -97,6 +97,14 @@ Item {
         value: WlrKeyboardFocus.OnDemand
     }
 
+    Binding {
+        when: root.hasCurrent && root.currentName === "notes"
+
+        target: QsWindow.window
+        property: "WlrLayershell.keyboardFocus"
+        value: WlrKeyboardFocus.OnDemand
+    }
+
     Comp {
         id: content
 

@@ -37,6 +37,25 @@ Row {
         }
     }
 
+    // Quick notes
+    Item {
+        implicitWidth: notesIcon.implicitWidth
+        implicitHeight: notesIcon.implicitHeight
+
+        MaterialIcon {
+            id: notesIcon
+            anchors.centerIn: parent
+            text: "edit_note"
+            color: root.colour
+            font.pointSize: Appearance.font.size.normal
+        }
+        MouseArea {
+            anchors.fill: parent
+            cursorShape: Qt.PointingHandCursor
+            onClicked: Visibilities.showPopout(Hypr.monitorFor(root.screen), "notes")
+        }
+    }
+
     // Do not disturb toggle
     Item {
         implicitWidth: dndIcon.implicitWidth

@@ -232,44 +232,5 @@ Variants {
             }
         }
 
-        PanelWindow {
-            id: utilitiesEdgeStrip
-
-            screen: scope.modelData
-            WlrLayershell.namespace: "glass-utilities-edge"
-            WlrLayershell.keyboardFocus: WlrKeyboardFocus.None
-            WlrLayershell.exclusionMode: ExclusionMode.Ignore
-            WlrLayershell.layer: WlrLayer.Overlay
-
-            anchors { right: true; bottom: true }
-            // Leave the 20px corner free for the corner media hot corner
-            margins.right: 20
-            exclusiveZone: 0
-            implicitWidth: Config.utilities.sizes.width
-            implicitHeight: 4
-            color: "transparent"
-
-            visible: Config.utilities.enabled && !win.hasFullscreen
-
-            Timer {
-                id: utilitiesHideTimer
-                interval: 150
-                onTriggered: {
-                    // Hand-off: keep open while the cursor is over the revealed panel
-                    if (interactions.containsMouse) return
-                    visibilities.utilities = false
-                }
-            }
-
-            MouseArea {
-                anchors.fill: parent
-                hoverEnabled: true
-                onEntered: {
-                    utilitiesHideTimer.stop()
-                    visibilities.utilities = true
-                }
-                onExited: utilitiesHideTimer.start()
-            }
-        }
     }
 }

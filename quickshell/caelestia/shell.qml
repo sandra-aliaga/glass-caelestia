@@ -8,7 +8,6 @@ import "modules/background"
 import "modules/areapicker"
 import "modules/lock"
 import "modules/topbar"
-import "modules/cornernotifs"
 import "modules/cornermedia"
 import "modules/cheatsheet"
 import Quickshell
@@ -29,7 +28,6 @@ ShellRoot {
     }
 
     TopBarWrapper {}
-    CornerNotifsWrapper {}
     CornerMediaWrapper {}
     CheatsheetWrapper {}
 }

@@ -27,14 +27,7 @@ Scope {
             Quickshell.execDetached(action);
     }
 
-    LogindManager {
-        onAboutToSleep: {
-            if (Config.general.idle.lockBeforeSleep)
-                root.lock.lock.locked = true;
-        }
-        onLockRequested: root.lock.lock.locked = true
-        onUnlockRequested: root.lock.lock.unlock()
-    }
+
 
     Variants {
         model: Config.general.idle.timeouts

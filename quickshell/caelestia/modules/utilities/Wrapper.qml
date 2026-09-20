@@ -19,7 +19,9 @@ Item {
 
         reloadableId: "utilities"
     }
-    readonly property bool shouldBeActive: visibilities.sidebar || (visibilities.utilities && Config.utilities.enabled && !(visibilities.session && Config.session.enabled))
+    // Utility controls now live in the unified glass corner panel. Keep this
+    // wrapper only as the footer of the notification sidebar.
+    readonly property bool shouldBeActive: visibilities.sidebar
 
     visible: height > 0
     implicitHeight: 0

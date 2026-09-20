@@ -13,7 +13,7 @@ Item {
     required property var visibilities
     property bool hovered
     readonly property Brightness.Monitor monitor: Brightness.getMonitorForScreen(root.screen)
-    readonly property bool shouldBeActive: visibilities.osd && Config.osd.enabled && !(visibilities.utilities && Config.utilities.enabled)
+    readonly property bool shouldBeActive: visibilities.osd && Config.osd.enabled
 
     property real volume
     property bool muted

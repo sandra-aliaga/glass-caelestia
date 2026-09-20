@@ -2,8 +2,8 @@
 # Script para cambiar la escala del monitor dinámicamente
 # Valores válidos: 1.0, 1.2, 1.4, 1.6, 1.8, 2.0
 
-set scales 10 12 14 16 18 20
-set scale_labels 1.0 1.2 1.4 1.6 1.8 2.0
+set scales 10 11 12 13 14 15 16 17 18 19 20
+set scale_labels 1.0 1.1 1.2 1.3 1.4 1.5 1.6 1.7 1.8 1.9 2.0
 
 # Obtener la escala actual y convertir a entero (x10) para comparar sin decimales
 set current (hyprctl monitors -j | jq -r '.[0].scale')

@@ -2,9 +2,11 @@ pragma ComponentBehavior: Bound
 
 import qs.components
 import qs.config
+import qs.services as Services
 import Quickshell
 import Quickshell.Services.SystemTray
 import QtQuick
+import QtQuick.Controls
 
 import "./kblayout"
 
@@ -122,6 +124,11 @@ Item {
         }
 
         Popout {
+            name: "notes"
+            sourceComponent: notesComponent
+        }
+
+        Popout {
             name: "kblayout"
             sourceComponent: KbLayout {
                 wrapper: root.wrapper
@@ -165,6 +172,69 @@ Item {
                         popouts: root.wrapper
                         trayItem: trayMenu.modelData.menu
                     }
+                }
+            }
+        }
+
+        Component {
+            id: notesComponent
+
+            Column {
+                width: Config.bar.sizes.clipboardWidth
+                spacing: Appearance.spacing.normal
+
+                StyledText {
+                    text: qsTr("Quick notes")
+                    font.weight: 500
+                }
+
+                StyledRect {
+                    width: parent.width
+                    implicitHeight: 220
+                    radius: Appearance.rounding.normal
+                    color: Services.Colours.tPalette.m3surfaceContainer
+
+                    TextArea {
+                        id: notesArea
+
+                        anchors.fill: parent
+                        anchors.margins: Appearance.padding.normal
+
+                        wrapMode: TextEdit.Wrap
+                        text: Services.Scratchpad.text
+                        placeholderText: qsTr("Write a note…")
+                        placeholderTextColor: Services.Colours.palette.m3outline
+                        color: Services.Colours.palette.m3onSurface
+                        selectionColor: Services.Colours.palette.m3primary
+                        selectedTextColor: Services.Colours.palette.m3onPrimary
+                        font.family: Appearance.font.family.sans
+                        font.pointSize: Appearance.font.size.normal
+                        padding: 0
+                        background: null
+
+                        Component.onCompleted: forceActiveFocus()
+                        onTextChanged: Services.Scratchpad.setText(text)
+
+                        Keys.onEscapePressed: {
+                            focus = false;
+                            root.wrapper.close();
+                        }
+
+                        Connections {
+                            target: Services.Scratchpad
+
+                            function onTextChanged(): void {
+                                if (notesArea.text !== Services.Scratchpad.text)
+                                    notesArea.text = Services.Scratchpad.text;
+                            }
+                        }
+                    }
+                }
+
+                StyledText {
+                    text: qsTr("Saved automatically")
+                    color: Services.Colours.palette.m3outline
+                    font.pointSize: Appearance.font.size.small
                 }
             }
         }

@@ -3,6 +3,7 @@ pragma ComponentBehavior: Bound
 import qs.services
 import qs.config
 import qs.components
+import qs.modules.utilities as Utilities
 import Caelestia
 import Quickshell
 import Quickshell.Wayland
@@ -15,22 +16,15 @@ PanelWindow {
 
     property bool open: false
 
-    // Only true while the user is actively editing the notes — gates keyboard
-    // focus so the panel never steals focus when it just appears (toasts, etc.)
-    property bool notesEditing: false
-
     // Keeps the wrapper from closing the panel while in use
-    readonly property bool hold: panelHover.hovered || notesArea.activeFocus
+    readonly property bool hold: panelHover.hovered
 
     // Follow the focused monitor so the panel opens where the user is working
     screen: Hypr.focusedScreen
 
     WlrLayershell.namespace: "glass-corner-media"
     WlrLayershell.layer: open ? WlrLayer.Overlay : WlrLayer.Top
-    // Grab keyboard only while editing notes, never just because it's visible
-    WlrLayershell.keyboardFocus: notesEditing ? WlrKeyboardFocus.OnDemand : WlrKeyboardFocus.None
-
-    onOpenChanged: if (!open) notesEditing = false
+    WlrLayershell.keyboardFocus: WlrKeyboardFocus.None
 
     readonly property real reveal: open ? 1 : 0
 
@@ -39,11 +33,20 @@ PanelWindow {
         return Toaster.toasts.filter(t => !t.closed)
     }
     readonly property bool hasMedia: Players.current !== null
+    readonly property var visibilities: Visibilities.getForScreen(root.screen)
+    readonly property var panels: Visibilities.panels.get(Hypr.monitorFor(root.screen))
+    readonly property PersistentProperties utilityProps: PersistentProperties {
+        property bool recordingListExpanded: false
+        property string recordingConfirmDelete
+        property string recordingMode
+
+        reloadableId: "unifiedCornerUtilities"
+    }
 
     anchors { bottom: true; right: true }
     margins { bottom: 10; right: 10 }
 
-    implicitWidth: 300
+    implicitWidth: Config.utilities.sizes.width
     implicitHeight: content.implicitHeight + Appearance.padding.large * 2
 
     visible: glass.reveal > 0.01
@@ -180,62 +183,26 @@ PanelWindow {
 
             // DailyLogView { Layout.fillWidth: true }
 
-            // ── Quick notes section ───────────────────────────────────────
+            Rectangle {
+                Layout.fillWidth: true
+                height: 1
+                color: Qt.rgba(1, 1, 1, 0.08)
+            }
+
             StyledText {
                 Layout.fillWidth: true
-                text: qsTr("Notes")
+                text: qsTr("Utilities")
                 font.pointSize: Appearance.font.size.small
                 color: Colours.palette.m3outlineVariant
                 font.capitalization: Font.AllUppercase
                 font.letterSpacing: 1
             }
 
-            Flickable {
+            Utilities.Content {
                 Layout.fillWidth: true
-                Layout.preferredHeight: Math.min(notesArea.implicitHeight, 120)
-                contentWidth: width
-                contentHeight: notesArea.implicitHeight
-                boundsBehavior: Flickable.StopAtBounds
-                clip: true
-
-                TextArea.flickable: TextArea {
-                    id: notesArea
-
-                    wrapMode: TextEdit.Wrap
-                    text: Scratchpad.text
-                    onTextChanged: Scratchpad.setText(text)
-                    onActiveFocusChanged: if (!activeFocus) root.notesEditing = false
-                    Keys.onEscapePressed: {
-                        root.notesEditing = false;
-                        focus = false;
-                    }
-
-                    // Pointer events reach us even with no keyboard focus; this
-                    // flips the surface to OnDemand, then we grab focus
-                    TapHandler {
-                        onTapped: {
-                            root.notesEditing = true;
-                            Qt.callLater(() => notesArea.forceActiveFocus());
-                        }
-                    }
-
-                    placeholderText: qsTr("Quick notes…")
-                    placeholderTextColor: Colours.palette.m3outline
-                    color: Colours.palette.m3onSurface
-                    font.family: Appearance.font.family.sans
-                    font.pointSize: Appearance.font.size.small
-                    padding: 0
-                    background: null
-
-                    Connections {
-                        target: Scratchpad
-
-                        function onTextChanged(): void {
-                            if (notesArea.text !== Scratchpad.text)
-                                notesArea.text = Scratchpad.text;
-                        }
-                    }
-                }
+                props: root.utilityProps
+                visibilities: root.visibilities
+                popouts: root.panels.popouts
             }
         }
     }
