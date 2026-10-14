@@ -1,5 +1,6 @@
 pragma ComponentBehavior: Bound
 
+import Caelestia.Images
 import Caelestia
 import Quickshell.Widgets
 import QtQuick

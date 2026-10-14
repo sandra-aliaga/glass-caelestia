@@ -9,6 +9,7 @@ Item {
     required property var props
     required property var visibilities
     required property Item popouts
+    property bool recordingVisible: visible
 
     implicitWidth: layout.implicitWidth
     implicitHeight: layout.implicitHeight
@@ -22,6 +23,7 @@ Item {
         IdleInhibit {}
 
         Record {
+            observerActive: root.recordingVisible
             props: root.props
             visibilities: root.visibilities
             z: 1

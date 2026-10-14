@@ -19,7 +19,7 @@ Column {
     StyledText {
         function formatSeconds(s: int, fallback: string): string {
             const day = Math.floor(s / 86400);
-            const hr = Math.floor(s / 3600) % 60;
+            const hr = Math.floor(s / 3600) % 24;
             const min = Math.floor(s / 60) % 60;
 
             let comps = [];
@@ -33,7 +33,18 @@ Column {
             return comps.join(", ") || fallback;
         }
 
-        text: UPower.displayDevice.isLaptopBattery ? qsTr("Time %1: %2").arg(UPower.onBattery ? "remaining" : "until charged").arg(UPower.onBattery ? formatSeconds(UPower.displayDevice.timeToEmpty, "Calculating...") : formatSeconds(UPower.displayDevice.timeToFull, "Fully charged!")) : qsTr("Power profile: %1").arg(PowerProfile.toString(PowerProfiles.profile))
+        text: {
+            const device = UPower.displayDevice;
+            if (!device.isLaptopBattery)
+                return qsTr("Power profile: %1").arg(PowerProfile.toString(PowerProfiles.profile));
+            if (UPower.onBattery)
+                return qsTr("Time remaining: %1").arg(formatSeconds(device.timeToEmpty, qsTr("Calculating...")));
+            if (device.timeToFull > 0)
+                return qsTr("Time until charged: %1").arg(formatSeconds(device.timeToFull, qsTr("Calculating...")));
+            if (Math.round(device.percentage * 100) === 100)
+                return qsTr("Fully charged!");
+            return qsTr("Calculating time until charged...");
+        }
     }
 
     Loader {

@@ -1,9 +1,9 @@
 pragma Singleton
 
+import Caelestia.Services
 import qs.components.misc
 import qs.config
 import Caelestia
-import Caelestia.Internal
 import Quickshell
 import Quickshell.Hyprland
 import Quickshell.Io
@@ -36,6 +36,7 @@ Singleton {
     readonly property alias devices: extras.devices
 
     property bool hadKeyboard
+    property string lastKbLayoutFull: ""
 
     signal configReloaded
 
@@ -74,8 +75,11 @@ Singleton {
     }
 
     onKbLayoutFullChanged: {
-        if (hadKeyboard && Config.utilities.toasts.kbLayoutChanged)
+        if (hadKeyboard && kbLayoutFull && kbLayoutFull !== "Unknown" && kbLayoutFull !== lastKbLayoutFull && Config.utilities.toasts.kbLayoutChanged)
             Toaster.toast(qsTr("Keyboard layout changed"), qsTr("Layout changed to: %1").arg(kbLayoutFull), "keyboard");
+
+        if (kbLayoutFull && kbLayoutFull !== "Unknown")
+            lastKbLayoutFull = kbLayoutFull;
 
         hadKeyboard = !!keyboard;
     }

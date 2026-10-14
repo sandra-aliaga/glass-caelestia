@@ -2,6 +2,7 @@ pragma ComponentBehavior: Bound
 
 import qs.components
 import qs.components.controls
+import qs.components.misc
 import qs.services
 import qs.config
 import QtQuick
@@ -12,12 +13,20 @@ StyledRect {
 
     required property var props
     required property var visibilities
+    property bool observerActive: visible
 
     Layout.fillWidth: true
     implicitHeight: layout.implicitHeight + layout.anchors.margins * 2
 
     radius: Appearance.rounding.normal
     color: Colours.tPalette.m3surfaceContainer
+
+    Loader {
+        active: root.observerActive
+        sourceComponent: Ref {
+            service: Recorder
+        }
+    }
 
     ColumnLayout {
         id: layout

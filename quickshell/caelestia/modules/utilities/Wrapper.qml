@@ -90,6 +90,7 @@ Item {
         active: true
 
         sourceComponent: Content {
+            recordingVisible: root.shouldBeActive
             implicitWidth: root.implicitWidth - Appearance.padding.large * 2
             props: root.props
             visibilities: root.visibilities

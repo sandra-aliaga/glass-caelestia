@@ -200,31 +200,56 @@ Singleton {
 
     function getEthernetInterfaces(callback: var): void {
         executeCommand(["-t", "-f", root.deviceStatusFields, root.nmcliCommandDevice, "status"], result => {
-            const interfaces = parseDeviceStatusOutput(result.output, root.deviceTypeEthernet);
-            const devices = [];
-
-            for (const iface of interfaces) {
-                const connected = isConnectedState(iface.state);
-
-                devices.push({
-                    interface: iface.device,
-                    type: iface.type,
-                    state: iface.state,
-                    connection: iface.connection,
-                    connected: connected,
-                    ipAddress: "",
-                    gateway: "",
-                    dns: [],
-                    subnet: "",
-                    macAddress: "",
-                    speed: ""
-                });
+            if (!result.success) {
+                console.warn("Failed to query ethernet interfaces:", result.error);
+                if (callback)
+                    callback(root.ethernetInterfaces);
+                return;
             }
 
-            root.ethernetInterfaces = interfaces;
-            root.ethernetDevices = devices;
-            if (callback)
-                callback(interfaces);
+            const interfaces = parseDeviceStatusOutput(result.output, root.deviceTypeEthernet);
+            const applyInterfaces = filtered => {
+                const devices = filtered.map(iface => ({
+                            interface: iface.device,
+                            type: iface.type,
+                            state: iface.state,
+                            connection: iface.connection,
+                            connected: isConnectedState(iface.state),
+                            ipAddress: "",
+                            gateway: "",
+                            dns: [],
+                            subnet: "",
+                            macAddress: "",
+                            speed: ""
+                        }));
+
+                root.ethernetInterfaces = filtered;
+                root.ethernetDevices = devices;
+                if (callback)
+                    callback(filtered);
+            };
+
+            if (interfaces.length === 0) {
+                applyInterfaces([]);
+                return;
+            }
+
+            // Virtual interfaces have no hardware device entry in sysfs.
+            const proc = physicalCheckProc.createObject(root);
+            proc.callback = result => {
+                if (!result.success) {
+                    console.warn(`Failed to classify ethernet interfaces (exited: ${result.exitCode}); keeping the unfiltered list.`);
+                    applyInterfaces(interfaces);
+                    return;
+                }
+
+                const physicalSet = result.output.trim().split("\n").filter(l => l.length > 0);
+                const filtered = interfaces.filter(iface => physicalSet.includes(iface.device));
+
+                applyInterfaces(filtered);
+            };
+
+            proc.exec(["sh", "-c", 'test -d /sys/class/net || exit 1; for i do [ -e "/sys/class/net/$i/device" ] && printf "%s\\n" "$i"; done; exit 0', "sh", ...interfaces.map(iface => iface.device)]);
         });
     }
 
@@ -935,6 +960,38 @@ Singleton {
         }
     }
 
+    Component {
+        id: physicalCheckProc
+
+        Process {
+            id: proc
+
+            property var callback: null
+
+            stdout: StdioCollector {
+                id: stdoutCollector
+            }
+
+            stderr: StdioCollector {
+                id: stderrCollector
+            }
+
+            onExited: code => { // qmllint disable signal-handler-parameters
+                Qt.callLater(() => {
+                    const callback = proc.callback;
+                    const result = {
+                        success: code === 0,
+                        output: stdoutCollector.text ?? "",
+                        error: stderrCollector.text ?? "",
+                        exitCode: code
+                    };
+
+                    proc.destroy();
+                    callback?.(result);
+                });
+            }
+        }
+    }
     Component {
         id: commandProc
 

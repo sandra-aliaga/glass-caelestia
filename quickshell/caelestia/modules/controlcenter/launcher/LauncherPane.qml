@@ -1,5 +1,6 @@
 pragma ComponentBehavior: Bound
 
+import Caelestia.Models
 import ".."
 import "../components"
 import "../../launcher/services"

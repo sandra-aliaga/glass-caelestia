@@ -199,6 +199,7 @@ PanelWindow {
             }
 
             Utilities.Content {
+                recordingVisible: root.open
                 Layout.fillWidth: true
                 props: root.utilityProps
                 visibilities: root.visibilities

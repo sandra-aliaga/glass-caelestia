@@ -1,6 +1,7 @@
 pragma Singleton
 pragma ComponentBehavior: Bound
 
+import Caelestia.Images
 import qs.config
 import qs.utils
 import Caelestia
